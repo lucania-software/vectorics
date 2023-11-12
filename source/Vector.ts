@@ -39,6 +39,8 @@ export class Vector<Tuple extends TupleN> {
     public set(array: Tuple): this;
     public set(value: VectorSource<Tuple>) { return this.operation(value, (_, b) => b); }
 
+    public normalize() { return this.operation(this.getMagnitude(), (a, b) => a / b); }
+
     public dot(value: Vector<Tuple>) { return this.clone().multiply(value).getSum(); }
 
     public distance(vector: Vector<Tuple>) {
@@ -81,6 +83,10 @@ export class Vector<Tuple extends TupleN> {
 
     private get _components(): number[] {
         return this.components;
+    }
+
+    public get size(): Tuple {
+        return this.components.length as unknown as Tuple;
     }
 
 }
