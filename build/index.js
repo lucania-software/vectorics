@@ -5,54 +5,59 @@
 })(this, (function (exports) { 'use strict';
 
     class Matrix {
-        data;
+        _data;
         size;
+        length;
         constructor(...data) {
-            this.data = data;
+            this._data = data;
             this.size = Math.sqrt(data.length);
+            this.length = data.length;
         }
         add(value) {
             const data = this._tuple(value);
-            this.data.map((_, index) => this.data[index] += data[index]);
+            this._data.map((_, index) => this._data[index] += data[index]);
             return this;
         }
         subtract(value) {
             const data = this._tuple(value);
-            this.data.forEach((_, index) => this.data[index] -= data[index]);
+            this._data.forEach((_, index) => this._data[index] -= data[index]);
             return this;
         }
         multiply(value) {
             const data = this._tuple(value);
-            this.data.forEach((_, index) => this.data[index] *= data[index]);
+            this._data.forEach((_, index) => this._data[index] *= data[index]);
             return this;
         }
         divide(value) {
             const data = this._tuple(value);
-            this.data.forEach((_, index) => this.data[index] /= data[index]);
+            this._data.forEach((_, index) => this._data[index] /= data[index]);
             return this;
         }
         transpose() {
             const matrix = this.clone();
             for (let i = 0; i < this.size; i++) {
                 for (let j = 0; j < this.size; j++) {
-                    matrix.data[i * this.size + j] = this.data[j];
+                    matrix._data[i * this.size + j] = this._data[j];
                 }
             }
-            this.data = matrix.data;
+            this._data = matrix._data;
         }
         clone() {
-            return new Matrix(...this.data);
+            return new Matrix(...this._data);
         }
         _tuple(value) {
             if (typeof value === "number") {
-                return new Array(this.size).fill(value);
+                return new Array(this.length).fill(value);
             }
             else if (value instanceof Matrix) {
-                return value.data;
+                return value._data;
             }
             else {
                 return value;
             }
+        }
+        get data() {
+            return this._data;
         }
     }
     class Matrix2 extends Matrix {
@@ -63,9 +68,9 @@
     }
     exports.MatrixToolbox = void 0;
     (function (MatrixToolbox) {
-        function tuple(size, source) {
+        function tuple(length, source) {
             if (typeof source === "number") {
-                return new Array(size).fill(source);
+                return new Array(length).fill(source);
             }
             else if (source instanceof Matrix) {
                 return source.data;
@@ -127,9 +132,9 @@
     })(exports.MatrixToolbox || (exports.MatrixToolbox = {}));
 
     class Vector {
-        components;
+        _components;
         constructor(...components) {
-            this.components = components;
+            this._components = components;
         }
         add(value) { return this.operation(value, (a, b) => a + b); }
         subtract(value) { return this.operation(value, (a, b) => a - b); }
@@ -172,11 +177,11 @@
         toString() {
             return `[ ${this._components.join(", ")} ]`;
         }
-        get _components() {
-            return this.components;
-        }
         get size() {
-            return this.components.length;
+            return this._components.length;
+        }
+        get components() {
+            return this._components;
         }
     }
     class Vector2 extends Vector {

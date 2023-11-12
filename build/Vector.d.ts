@@ -5,7 +5,7 @@ export type Tuple4 = [number, number, number, number];
 export type TupleN = Tuple2 | Tuple3 | Tuple4 | number[];
 export type VectorSource<Tuple extends TupleN> = number | Tuple | Vector<Tuple>;
 export declare class Vector<Tuple extends TupleN> {
-    readonly components: Tuple;
+    private _components;
     constructor(...components: Tuple);
     add(scalar: number): this;
     add(vector: Vector<Tuple>): this;
@@ -30,8 +30,8 @@ export declare class Vector<Tuple extends TupleN> {
     getMagnitude(): number;
     operation(value: VectorSource<Tuple>, operation: ComponentWiseOperation): this;
     toString(): string;
-    private get _components();
     get size(): Tuple;
+    get components(): Tuple;
 }
 export declare class Vector2 extends Vector<Tuple2> {
     get x(): number;

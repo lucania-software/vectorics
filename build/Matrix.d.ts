@@ -5,8 +5,9 @@ export type Tuple4x4 = [...Tuple4, ...Tuple4, ...Tuple4, ...Tuple4];
 export type TupleNxN = Tuple2x2 | Tuple3x3 | Tuple4x4 | number[];
 export type MatrixSource<Tuple extends TupleNxN> = number | Tuple | Matrix<Tuple>;
 export declare class Matrix<Tuple extends TupleNxN> {
-    data: Tuple;
+    private _data;
     readonly size: number;
+    readonly length: Tuple["length"];
     constructor(...data: Tuple);
     add(scalar: number): this;
     add(matrix: Matrix<Tuple>): this;
@@ -23,6 +24,7 @@ export declare class Matrix<Tuple extends TupleNxN> {
     transpose(): void;
     clone(): Matrix<Tuple>;
     private _tuple;
+    get data(): Tuple;
 }
 export declare class Matrix2 extends Matrix<Tuple2x2> {
 }
@@ -31,7 +33,7 @@ export declare class Matrix3 extends Matrix<Tuple3x3> {
 export declare class Matrix4 extends Matrix<Tuple4x4> {
 }
 export declare namespace MatrixToolbox {
-    function tuple<Tuple extends TupleNxN>(size: Tuple["length"], source: MatrixSource<Tuple>): Tuple;
+    function tuple<Tuple extends TupleNxN>(length: Tuple["length"], source: MatrixSource<Tuple>): Tuple;
     function fromSource<Tuple extends Tuple2x2>(size: 4, source: MatrixSource<Tuple>): Matrix2;
     function fromSource<Tuple extends Tuple3x3>(size: 9, source: MatrixSource<Tuple>): Matrix3;
     function fromSource<Tuple extends Tuple4x4>(size: 16, source: MatrixSource<Tuple>): Matrix4;
