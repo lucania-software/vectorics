@@ -8,10 +8,10 @@ export type VectorSource<Tuple extends TupleN> = number | Tuple | Vector<Tuple>;
 
 export class Vector<Tuple extends TupleN> {
 
-    public readonly components: Tuple;
+    private _components: Tuple;
 
     public constructor(...components: Tuple) {
-        this.components = components;
+        this._components = components;
     }
 
     public add(scalar: number): this;
@@ -81,12 +81,12 @@ export class Vector<Tuple extends TupleN> {
         return `[ ${this._components.join(", ")} ]`;
     }
 
-    private get _components(): number[] {
-        return this.components;
+    public get size(): Tuple {
+        return this._components.length as unknown as Tuple;
     }
 
-    public get size(): Tuple {
-        return this.components.length as unknown as Tuple;
+    public get components() {
+        return this._components;
     }
 
 }

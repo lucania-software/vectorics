@@ -8,12 +8,14 @@ export type MatrixSource<Tuple extends TupleNxN> = number | Tuple | Matrix<Tuple
 
 export class Matrix<Tuple extends TupleNxN> {
 
-    public data: Tuple;
+    private _data: Tuple;
     public readonly size: number;
+    public readonly length: Tuple["length"];
 
     public constructor(...data: Tuple) {
-        this.data = data;
+        this._data = data;
         this.size = Math.sqrt(data.length);
+        this.length = data.length;
     }
 
     public add(scalar: number): this;
@@ -21,7 +23,7 @@ export class Matrix<Tuple extends TupleNxN> {
     public add(tuple: Tuple): this;
     public add(value: MatrixSource<Tuple>) {
         const data = this._tuple(value);
-        this.data.map((_, index) => this.data[index] += data[index]);
+        this._data.map((_, index) => this._data[index] += data[index]);
         return this;
     }
 
@@ -30,7 +32,7 @@ export class Matrix<Tuple extends TupleNxN> {
     public subtract(tuple: Tuple): this;
     public subtract(value: MatrixSource<Tuple>) {
         const data = this._tuple(value);
-        this.data.forEach((_, index) => this.data[index] -= data[index]);
+        this._data.forEach((_, index) => this._data[index] -= data[index]);
         return this;
     }
 
@@ -39,7 +41,7 @@ export class Matrix<Tuple extends TupleNxN> {
     public multiply(tuple: Tuple): this;
     public multiply(value: MatrixSource<Tuple>) {
         const data = this._tuple(value);
-        this.data.forEach((_, index) => this.data[index] *= data[index]);
+        this._data.forEach((_, index) => this._data[index] *= data[index]);
         return this;
     }
 
@@ -48,7 +50,7 @@ export class Matrix<Tuple extends TupleNxN> {
     public divide(tuple: Tuple): this;
     public divide(value: MatrixSource<Tuple>) {
         const data = this._tuple(value);
-        this.data.forEach((_, index) => this.data[index] /= data[index]);
+        this._data.forEach((_, index) => this._data[index] /= data[index]);
         return this;
     }
 
@@ -56,24 +58,28 @@ export class Matrix<Tuple extends TupleNxN> {
         const matrix = this.clone();
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
-                matrix.data[i * this.size + j] = this.data[j];
+                matrix._data[i * this.size + j] = this._data[j];
             }
         }
-        this.data = matrix.data;
+        this._data = matrix._data;
     }
 
     public clone(): Matrix<Tuple> {
-        return new Matrix(...this.data);
+        return new Matrix(...this._data);
     }
 
     private _tuple(value: MatrixSource<Tuple>): Tuple {
         if (typeof value === "number") {
-            return new Array(this.size).fill(value) as Tuple;
+            return new Array(this.length).fill(value) as Tuple;
         } else if (value instanceof Matrix) {
-            return value.data;
+            return value._data;
         } else {
             return value;
         }
+    }
+
+    public get data() {
+        return this._data;
     }
 
 }
@@ -86,9 +92,9 @@ export class Matrix4 extends Matrix<Tuple4x4> { }
 
 export namespace MatrixToolbox {
 
-    export function tuple<Tuple extends TupleNxN>(size: Tuple["length"], source: MatrixSource<Tuple>): Tuple {
+    export function tuple<Tuple extends TupleNxN>(length: Tuple["length"], source: MatrixSource<Tuple>): Tuple {
         if (typeof source === "number") {
-            return new Array(size).fill(source) as Tuple;
+            return new Array(length).fill(source) as Tuple;
         } else if (source instanceof Matrix) {
             return source.data;
         } else {
