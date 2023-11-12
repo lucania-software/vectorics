@@ -22,6 +22,7 @@ export declare class Vector<Tuple extends TupleN> {
     set(scalar: number): this;
     set(vector: Vector<Tuple>): this;
     set(array: Tuple): this;
+    normalize(): this;
     dot(value: Vector<Tuple>): number;
     distance(vector: Vector<Tuple>): number;
     clone(): Vector<Tuple>;
@@ -30,6 +31,7 @@ export declare class Vector<Tuple extends TupleN> {
     operation(value: VectorSource<Tuple>, operation: ComponentWiseOperation): this;
     toString(): string;
     private get _components();
+    get size(): Tuple;
 }
 export declare class Vector2 extends Vector<Tuple2> {
     get x(): number;

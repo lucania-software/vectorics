@@ -136,6 +136,7 @@
         multiply(value) { return this.operation(value, (a, b) => a * b); }
         divide(value) { return this.operation(value, (a, b) => a / b); }
         set(value) { return this.operation(value, (_, b) => b); }
+        normalize() { return this.operation(this.getMagnitude(), (a, b) => a / b); }
         dot(value) { return this.clone().multiply(value).getSum(); }
         distance(vector) {
             const difference = this.clone().subtract(vector);
@@ -173,6 +174,9 @@
         }
         get _components() {
             return this.components;
+        }
+        get size() {
+            return this.components.length;
         }
     }
     class Vector2 extends Vector {
