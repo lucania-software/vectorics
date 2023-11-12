@@ -1,0 +1,40 @@
+{
+    "name": "@lucania/vectorics",
+    "version": "1.0.0",
+    "description": "A linear algebra library.",
+    "main": "./build/index.js",
+    "types": "./build/index.d.ts",
+    "scripts": {
+        "setup": "npm install",
+        "clean": "erase /F /S /Q build",
+        "build": "npx rollup --bundleConfigAsCjs --config rollup.config.js",
+        "build:clean": "npm run clean && npm run build",
+        "build:watch": "npx rollup --watch --bundleConfigAsCjs --config rollup.config.js",
+        "push": "npm run build:clean && npm publish --access public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lucania-software/vectorics.git"
+    },
+    "keywords": [
+        "Linear",
+        "Algebra",
+        "Matrix",
+        "Vector"
+    ],
+    "author": "Jeremy Bankes",
+    "license": "GPL-3.0-or-later",
+    "bugs": {
+        "url": "https://github.com/lucania-software/vectorics/issues"
+    },
+    "homepage": "https://github.com/lucania-software/vectorics#readme",
+    "devDependencies": {
+        "@babel/preset-env": "^7.23.3",
+        "@rollup/plugin-typescript": "^11.1.5",
+        "@types/node": "^20.9.0",
+        "nodemon": "^3.0.1",
+        "rollup": "^4.4.0",
+        "tslib": "^2.6.2",
+        "typescript": "^5.2.2"
+    }
+}
