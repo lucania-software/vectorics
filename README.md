@@ -26,7 +26,7 @@ const vector = new Vector2(6, 8);
 vector.normalize()
 ```
 
-### Using in Browser Environments (Client-Side)
+### Using in Browser Environments (Client-side)
 Download the library into your project.
 ```bash
 git clone https://github.com/lucania-software/vectorics libraries/vectorics
@@ -41,8 +41,6 @@ Link the library script in your page's HTML.
 ```
 Start using the library!
 ```ts
-const Vectorics = require("@lucania/vectorics");
-
 const matrix = new Vectorics.Matrix3(
     1, 9, 3,
     0, 5, 6,
