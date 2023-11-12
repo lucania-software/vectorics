@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "A linear algebra library.",
     "main": "./build/index.js",
-    "types": "./build/index.d.ts",
+    "types": "./types/index.d.ts",
     "scripts": {
         "setup": "npm install",
         "clean": "erase /F /S /Q build",
@@ -30,6 +30,9 @@
     "homepage": "https://github.com/lucania-software/vectorics#readme",
     "devDependencies": {
         "@babel/preset-env": "^7.23.3",
+        "@rollup/plugin-babel": "^6.0.4",
+        "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-node-resolve": "^15.2.3",
         "@rollup/plugin-typescript": "^11.1.5",
         "@types/node": "^20.9.0",
         "nodemon": "^3.0.1",

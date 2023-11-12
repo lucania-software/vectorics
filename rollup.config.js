@@ -1,14 +1,20 @@
-import typescript from "@rollup/plugin-typescript";
+import TypeScriptPlugin from "@rollup/plugin-typescript";
+import { nodeResolve as NodeResolvePlugin } from "@rollup/plugin-node-resolve";
+import CommonJsPlugin from "@rollup/plugin-commonjs";
+import { babel as BabelPlugin } from "@rollup/plugin-babel";
 
 /** @type {import("rollup").RollupOptions} */
 export default {
-    input: "source/index.ts",
+    input: "./source/index.ts",
     output: {
-        file: "build/index.js",
+        file: "./build/index.js",
         name: "Vectorics",
-        format: "umd",
-        sourcemap: false,
-        exports: "named"
+        format: "umd"
     },
-    plugins: [typescript()]
+    plugins: [
+        TypeScriptPlugin({ tsconfig: "./source/tsconfig.json" }),
+        NodeResolvePlugin(),
+        CommonJsPlugin(),
+        BabelPlugin({ babelHelpers: "bundled", presets: ["@babel/preset-env"] })
+    ]
 };
