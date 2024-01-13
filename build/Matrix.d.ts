@@ -1,4 +1,4 @@
-import { Tuple2, Tuple3, Tuple4 } from "./Vector";
+import { Tuple2, Tuple3, Tuple4, Vector } from "./Vector";
 export type Tuple2x2 = [...Tuple2, ...Tuple2];
 export type Tuple3x3 = [...Tuple3, ...Tuple3, ...Tuple3];
 export type Tuple4x4 = [...Tuple4, ...Tuple4, ...Tuple4, ...Tuple4];
@@ -9,6 +9,7 @@ export declare class Matrix<Tuple extends TupleNxN> {
     readonly size: number;
     readonly length: Tuple["length"];
     constructor(...data: Tuple);
+    get(row: number, column: number): number;
     add(scalar: number): this;
     add(matrix: Matrix<Tuple>): this;
     add(tuple: Tuple): this;
@@ -18,6 +19,7 @@ export declare class Matrix<Tuple extends TupleNxN> {
     multiply(scalar: number): this;
     multiply(matrix: Matrix<Tuple>): this;
     multiply(tuple: Tuple): this;
+    multiplyVector(vector: Vector<number[]>): Vector<number[]>;
     divide(scalar: number): this;
     divide(matrix: Matrix<Tuple>): this;
     divide(tuple: Tuple): this;
@@ -25,6 +27,7 @@ export declare class Matrix<Tuple extends TupleNxN> {
     clone(): Matrix<Tuple>;
     private _tuple;
     get data(): Tuple;
+    toString(fractionDigits?: number): string;
 }
 export declare class Matrix2 extends Matrix<Tuple2x2> {
 }

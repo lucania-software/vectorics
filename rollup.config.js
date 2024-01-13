@@ -1,7 +1,7 @@
-import TypeScriptPlugin from "@rollup/plugin-typescript";
-import { nodeResolve as NodeResolvePlugin } from "@rollup/plugin-node-resolve";
-import CommonJsPlugin from "@rollup/plugin-commonjs";
 import { babel as BabelPlugin } from "@rollup/plugin-babel";
+import CommonJsPlugin from "@rollup/plugin-commonjs";
+import { nodeResolve as NodeResolvePlugin } from "@rollup/plugin-node-resolve";
+import TypeScriptPlugin from "@rollup/plugin-typescript";
 
 /** @type {import("rollup").RollupOptions} */
 export default {

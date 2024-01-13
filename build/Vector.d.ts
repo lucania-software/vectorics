@@ -25,12 +25,12 @@ export declare class Vector<Tuple extends TupleN> {
     normalize(): this;
     dot(value: Vector<Tuple>): number;
     distance(vector: Vector<Tuple>): number;
-    clone(): Vector<Tuple>;
+    clone(): Vector<[...Tuple]>;
     getSum(): number;
     getMagnitude(): number;
     operation(value: VectorSource<Tuple>, operation: ComponentWiseOperation): this;
     toString(): string;
-    get size(): Tuple;
+    get size(): Tuple["length"];
     get components(): Tuple;
 }
 export declare class Vector2 extends Vector<Tuple2> {
@@ -42,6 +42,7 @@ export declare class Vector2 extends Vector<Tuple2> {
     set width(value: number);
     get height(): number;
     set height(value: number);
+    clone(): Vector2;
 }
 export declare class Vector3 extends Vector<Tuple3> {
     get x(): number;
@@ -57,6 +58,7 @@ export declare class Vector3 extends Vector<Tuple3> {
     get depth(): number;
     set depth(value: number);
     cross(vector: Vector3): this;
+    clone(): Vector3;
 }
 export declare class Vector4 extends Vector<Tuple4> {
     get x(): number;
@@ -71,6 +73,7 @@ export declare class Vector4 extends Vector<Tuple4> {
     set width(value: number);
     get height(): number;
     set height(value: number);
+    clone(): Vector4;
 }
 export declare namespace VectorToolbox {
     function tuple<Tuple extends TupleN>(size: Tuple["length"], source: VectorSource<Tuple>): Tuple;

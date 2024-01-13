@@ -48,8 +48,8 @@ export class Vector<Tuple extends TupleN> {
         return Math.sqrt(difference.multiply(difference).getSum());
     }
 
-    public clone(): Vector<Tuple> {
-        return new Vector(...this._components as Tuple);
+    public clone() {
+        return new Vector(...this._components);
     }
 
     public getSum() {
@@ -81,8 +81,8 @@ export class Vector<Tuple extends TupleN> {
         return `[ ${this._components.join(", ")} ]`;
     }
 
-    public get size(): Tuple {
-        return this._components.length as unknown as Tuple;
+    public get size(): Tuple["length"] {
+        return this._components.length;
     }
 
     public get components() {
@@ -102,6 +102,8 @@ export class Vector2 extends Vector<Tuple2> {
     public set width(value: number) { this.x = value; }
     public get height() { return this.y; }
     public set height(value: number) { this.y = value; }
+
+    public clone() { return new Vector2(this.x, this.y); }
 
 }
 
@@ -129,6 +131,8 @@ export class Vector3 extends Vector<Tuple3> {
         ]);
     }
 
+    public clone() { return new Vector3(this.x, this.y, this.z); }
+
 }
 
 export class Vector4 extends Vector<Tuple4> {
@@ -146,6 +150,8 @@ export class Vector4 extends Vector<Tuple4> {
     public set width(value: number) { this.z = value; }
     public get height() { return this.w; }
     public set height(value: number) { this.w = value; }
+
+    public clone() { return new Vector4(this.x, this.y, this.z, this.w); }
 
 }
 

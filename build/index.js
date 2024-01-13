@@ -13,6 +13,9 @@
             this.size = Math.sqrt(data.length);
             this.length = data.length;
         }
+        get(row, column) {
+            return this._data[row * this.size + column];
+        }
         add(value) {
             const data = this._tuple(value);
             this._data.map((_, index) => this._data[index] += data[index]);
@@ -25,8 +28,30 @@
         }
         multiply(value) {
             const data = this._tuple(value);
-            this._data.forEach((_, index) => this._data[index] *= data[index]);
+            const result = new Array(data.length).fill(0);
+            for (let resultRow = 0; resultRow < this.size; resultRow++) {
+                for (let resultColumn = 0; resultColumn < this.size; resultColumn++) {
+                    let sum = 0;
+                    for (let i = 0; i < this.size; i++) {
+                        sum += this._data[resultRow * this.size + i] * data[i * this.size + resultColumn];
+                    }
+                    result[resultRow * this.size + resultColumn] = sum;
+                }
+            }
+            this._data = result;
             return this;
+        }
+        multiplyVector(vector) {
+            if (vector.size !== this.size) {
+                throw new Error(`Cannot multiply ${vector.size} component vector by ${this.size}x${this.size} matrix.`);
+            }
+            const result = vector.clone().set(0);
+            for (let row = 0; row < this.size; row++) {
+                for (let column = 0; column < this.size; column++) {
+                    result.components[row] += this.get(row, column) * vector.components[column];
+                }
+            }
+            return result;
         }
         divide(value) {
             const data = this._tuple(value);
@@ -37,7 +62,7 @@
             const matrix = this.clone();
             for (let i = 0; i < this.size; i++) {
                 for (let j = 0; j < this.size; j++) {
-                    matrix._data[i * this.size + j] = this._data[j];
+                    matrix._data[i * this.size + j] = this._data[j * this.size + i];
                 }
             }
             this._data = matrix._data;
@@ -58,6 +83,22 @@
         }
         get data() {
             return this._data;
+        }
+        toString(fractionDigits = 2) {
+            const maximumLength = this._data.reduce((length, value) => {
+                const newLength = value.toFixed(fractionDigits).length;
+                return newLength > length ? newLength : length;
+            }, 0);
+            const lines = [];
+            let line;
+            for (let i = 0; i < this.size; i++) {
+                line = [];
+                for (let j = 0; j < this.size; j++) {
+                    line.push(this._data[i * this.size + j].toFixed(fractionDigits).padStart(maximumLength, " "));
+                }
+                lines.push(`[ ${line.join(", ")} ]`);
+            }
+            return lines.join("\n");
         }
     }
     class Matrix2 extends Matrix {
@@ -193,6 +234,7 @@
         set width(value) { this.x = value; }
         get height() { return this.y; }
         set height(value) { this.y = value; }
+        clone() { return new Vector2(this.x, this.y); }
     }
     class Vector3 extends Vector {
         get x() { return this.components[0]; }
@@ -214,6 +256,7 @@
                 this.x * vector.y - this.y * vector.x
             ]);
         }
+        clone() { return new Vector3(this.x, this.y, this.z); }
     }
     class Vector4 extends Vector {
         get x() { return this.components[0]; }
@@ -228,6 +271,7 @@
         set width(value) { this.z = value; }
         get height() { return this.w; }
         set height(value) { this.w = value; }
+        clone() { return new Vector4(this.x, this.y, this.z, this.w); }
     }
     exports.VectorToolbox = void 0;
     (function (VectorToolbox) {
