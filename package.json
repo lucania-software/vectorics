@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "description": "A linear algebra library.",
     "main": "./build/index.js",
+    "files": [
+        "./build"
+    ],
     "scripts": {
         "setup": "npm install",
         "clean": "erase /F /S /Q build",

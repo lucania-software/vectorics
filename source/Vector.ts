@@ -5,6 +5,9 @@ export type Tuple3 = [number, number, number];
 export type Tuple4 = [number, number, number, number];
 export type TupleN = Tuple2 | Tuple3 | Tuple4 | number[];
 export type VectorSource<Tuple extends TupleN> = number | Tuple | Vector<Tuple>;
+export type Vector2Source = VectorSource<Tuple2>;
+export type Vector3Source = VectorSource<Tuple3>;
+export type Vector4Source = VectorSource<Tuple4>;
 
 export class Vector<Tuple extends TupleN> {
 
@@ -60,6 +63,10 @@ export class Vector<Tuple extends TupleN> {
         return this.distance(this.clone().set(0));
     }
 
+    public isZero() {
+        return this._components.every((component) => component === 0);
+    }
+
     public operation(value: VectorSource<Tuple>, operation: ComponentWiseOperation) {
         if (typeof value === "number") {
             for (let i = 0; i < this._components.length; i++) {
@@ -89,6 +96,29 @@ export class Vector<Tuple extends TupleN> {
         return this._components;
     }
 
+    public static tuple<Tuple extends TupleN>(size: Tuple["length"], source: VectorSource<Tuple>): Tuple {
+        if (typeof source === "number") {
+            return new Array(size).fill(source) as Tuple;
+        } else if ("components" in source) {
+            return source.components;
+        } else {
+            return source;
+        }
+    }
+
+    public static fromSource<Tuple extends Tuple2>(size: 2, source: VectorSource<Tuple>): Vector2;
+    public static fromSource<Tuple extends Tuple3>(size: 3, source: VectorSource<Tuple>): Vector3;
+    public static fromSource<Tuple extends Tuple4>(size: 4, source: VectorSource<Tuple>): Vector4;
+    public static fromSource<Tuple extends TupleN>(size: Tuple["length"], source: VectorSource<Tuple>) {
+        const tuple = Vector.tuple(size, source);
+        switch (size) {
+            case 2: return new Vector2(...tuple as Tuple2);
+            case 3: return new Vector3(...tuple as Tuple3);
+            case 4: return new Vector4(...tuple as Tuple4);
+            default: return new Vector(...tuple);
+        }
+    }
+
 }
 
 export class Vector2 extends Vector<Tuple2> {
@@ -104,6 +134,10 @@ export class Vector2 extends Vector<Tuple2> {
     public set height(value: number) { this.y = value; }
 
     public clone() { return new Vector2(this.x, this.y); }
+
+    public static from(source: VectorSource<Tuple2>): Vector2 {
+        return Vector.fromSource(2, source);
+    }
 
 }
 
@@ -133,6 +167,10 @@ export class Vector3 extends Vector<Tuple3> {
 
     public clone() { return new Vector3(this.x, this.y, this.z); }
 
+    public static from(source: VectorSource<Tuple3>): Vector3 {
+        return Vector.fromSource(3, source);
+    }
+
 }
 
 export class Vector4 extends Vector<Tuple4> {
@@ -153,31 +191,8 @@ export class Vector4 extends Vector<Tuple4> {
 
     public clone() { return new Vector4(this.x, this.y, this.z, this.w); }
 
-}
-
-export namespace VectorToolbox {
-
-    export function tuple<Tuple extends TupleN>(size: Tuple["length"], source: VectorSource<Tuple>): Tuple {
-        if (typeof source === "number") {
-            return new Array(size).fill(source) as Tuple;
-        } else if (source instanceof Vector) {
-            return source.components;
-        } else {
-            return source;
-        }
-    }
-
-    export function fromSource<Tuple extends Tuple2>(size: 2, source: VectorSource<Tuple>): Vector2;
-    export function fromSource<Tuple extends Tuple3>(size: 3, source: VectorSource<Tuple>): Vector3;
-    export function fromSource<Tuple extends Tuple4>(size: 4, source: VectorSource<Tuple>): Vector4;
-    export function fromSource<Tuple extends TupleN>(size: Tuple["length"], source: VectorSource<Tuple>) {
-        const tuple = VectorToolbox.tuple(size, source);
-        switch (size) {
-            case 2: return new Vector2(...tuple as Tuple2);
-            case 3: return new Vector3(...tuple as Tuple3);
-            case 4: return new Vector4(...tuple as Tuple4);
-            default: return new Vector(...tuple);
-        }
+    public static from(source: VectorSource<Tuple4>): Vector4 {
+        return Vector.fromSource(4, source);
     }
 
 }

@@ -1,4 +1,4 @@
-import { Tuple2, Tuple3, Tuple4, Vector, Vector4 } from "./Vector";
+import { Tuple2, Tuple3, Tuple4, Vector, Vector2, Vector3, Vector4 } from "./Vector";
 
 export type Tuple2x2 = [...Tuple2, ...Tuple2];
 export type Tuple3x3 = [...Tuple3, ...Tuple3, ...Tuple3];
@@ -81,6 +81,11 @@ export class Matrix<Tuple extends TupleNxN> {
         return this;
     }
 
+    public inverse() {
+        this._data.forEach((value, index) => this._data[index] = 1 / value);
+        return this;
+    }
+
     public transpose() {
         const matrix = this.clone();
         for (let i = 0; i < this.size; i++) {
@@ -89,6 +94,7 @@ export class Matrix<Tuple extends TupleNxN> {
             }
         }
         this._data = matrix._data;
+        return this;
     }
 
     public clone(): Matrix<Tuple> {
@@ -126,17 +132,7 @@ export class Matrix<Tuple extends TupleNxN> {
         return lines.join("\n");
     }
 
-}
-
-export class Matrix2 extends Matrix<Tuple2x2> { }
-
-export class Matrix3 extends Matrix<Tuple3x3> { }
-
-export class Matrix4 extends Matrix<Tuple4x4> { }
-
-export namespace MatrixToolbox {
-
-    export function tuple<Tuple extends TupleNxN>(length: Tuple["length"], source: MatrixSource<Tuple>): Tuple {
+    public static tuple<Tuple extends TupleNxN>(length: Tuple["length"], source: MatrixSource<Tuple>): Tuple {
         if (typeof source === "number") {
             return new Array(length).fill(source) as Tuple;
         } else if (source instanceof Matrix) {
@@ -146,11 +142,11 @@ export namespace MatrixToolbox {
         }
     }
 
-    export function fromSource<Tuple extends Tuple2x2>(size: 4, source: MatrixSource<Tuple>): Matrix2;
-    export function fromSource<Tuple extends Tuple3x3>(size: 9, source: MatrixSource<Tuple>): Matrix3;
-    export function fromSource<Tuple extends Tuple4x4>(size: 16, source: MatrixSource<Tuple>): Matrix4;
-    export function fromSource<Tuple extends TupleNxN>(size: Tuple["length"], source: MatrixSource<Tuple>) {
-        const tuple = MatrixToolbox.tuple(size, source);
+    public static fromSource<Tuple extends Tuple2x2>(size: 4, source: MatrixSource<Tuple>): Matrix2;
+    public static fromSource<Tuple extends Tuple3x3>(size: 9, source: MatrixSource<Tuple>): Matrix3;
+    public static fromSource<Tuple extends Tuple4x4>(size: 16, source: MatrixSource<Tuple>): Matrix4;
+    public static fromSource<Tuple extends TupleNxN>(size: Tuple["length"], source: MatrixSource<Tuple>) {
+        const tuple = Matrix.tuple(size, source);
         switch (size) {
             case 2: return new Matrix2(...tuple as Tuple2x2);
             case 3: return new Matrix3(...tuple as Tuple3x3);
@@ -159,70 +155,112 @@ export namespace MatrixToolbox {
         }
     }
 
-    export namespace Projection {
+}
 
-        export function orthographic(left: number, right: number, bottom: number, top: number, near: number, far: number): Matrix4 {
-            const width = right - left;
-            const height = top - bottom;
-            const depth = far - near;
-            const translationX = -(right + left) / width;
-            const translationY = -(top + bottom) / height;
-            const translationZ = -(far + near) / depth;
-            return new Matrix4(
-                2 / width, 0, 0, translationX,
-                0, 2 / height, 0, translationY,
-                0, 0, -2 / depth, translationZ,
-                0, 0, 0, 1
-            );
-        }
+export class Matrix2 extends Matrix<Tuple2x2> {
 
+    public static identity() {
+        return new Matrix2(
+            1, 0,
+            0, 1
+        );
     }
 
+    public multiplyVector(vector: Vector2): Vector2;
+    public multiplyVector(vector: Vector<number[]>): Vector<number[]> {
+        return super.multiplyVector(vector);
+    }
 
-    export namespace Transformation {
+}
 
-        export function translate(translationX: number, translationY: number, translationZ: number): Matrix4 {
-            return new Matrix4(
-                1, 0, 0, translationX,
-                0, 1, 0, translationY,
-                0, 0, 1, translationZ,
-                0, 0, 0, 1
-            );
-        }
+export class Matrix3 extends Matrix<Tuple3x3> {
 
-        export function rotate(angleInDegrees: number, axisX: number, axisY: number, axisZ: number): Matrix4 {
-            const angleInRadians = angleInDegrees * globalThis.Math.PI / 180;
-            const cosAngle = globalThis.Math.cos(angleInRadians);
-            const sinAngle = globalThis.Math.sin(angleInRadians);
-            const oneMinusCos = 1 - cosAngle;
+    public static identity() {
+        return new Matrix3(
+            1, 0, 0,
+            0, 1, 0,
+            0, 0, 1
+        );
+    }
 
-            const tx = oneMinusCos * axisX;
-            const ty = oneMinusCos * axisY;
-            const tz = oneMinusCos * axisZ;
-            const txy = tx * axisY;
-            const txz = tx * axisZ;
-            const tyz = ty * axisZ;
-            const sinX = sinAngle * axisX;
-            const sinY = sinAngle * axisY;
-            const sinZ = sinAngle * axisZ;
+    public multiplyVector(vector: Vector3): Vector3;
+    public multiplyVector(vector: Vector<number[]>): Vector<number[]> {
+        return super.multiplyVector(vector);
+    }
 
-            return new Matrix4(
-                tx * axisX + cosAngle, txy - sinZ, txz + sinY, 0,
-                txy + sinZ, ty * axisY + cosAngle, tyz - sinX, 0,
-                txz - sinY, tyz + sinX, tz * axisZ + cosAngle, 0,
-                0, 0, 0, 1
-            );
-        }
+}
 
-        export function scale(scaleX: number, scaleY: number, scaleZ: number): Matrix4 {
-            return new Matrix4(
-                scaleX, 0, 0, 0,
-                0, scaleY, 0, 0,
-                0, 0, scaleZ, 0,
-                0, 0, 0, 1
-            );
-        }
+export class Matrix4 extends Matrix<Tuple4x4> {
 
+    public static identity() {
+        return new Matrix4(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
+    }
+
+    public multiplyVector(vector: Vector4): Vector4;
+    public multiplyVector(vector: Vector<number[]>): Vector<number[]> {
+        return super.multiplyVector(vector);
+    }
+
+    public static orthographic(left: number, right: number, bottom: number, top: number, near: number, far: number): Matrix4 {
+        const width = right - left;
+        const height = top - bottom;
+        const depth = far - near;
+        const translationX = -(right + left) / width;
+        const translationY = -(top + bottom) / height;
+        const translationZ = -(far + near) / depth;
+        return new Matrix4(
+            2 / width, 0, 0, translationX,
+            0, 2 / height, 0, translationY,
+            0, 0, -2 / depth, translationZ,
+            0, 0, 0, 1
+        );
+    }
+
+    public static translate(translationX: number, translationY: number, translationZ: number): Matrix4 {
+        return new Matrix4(
+            1, 0, 0, translationX,
+            0, 1, 0, translationY,
+            0, 0, 1, translationZ,
+            0, 0, 0, 1
+        );
+    }
+
+    public static rotate(angleInDegrees: number, axisX: number, axisY: number, axisZ: number): Matrix4 {
+        const angleInRadians = angleInDegrees * globalThis.Math.PI / 180;
+        const cosAngle = globalThis.Math.cos(angleInRadians);
+        const sinAngle = globalThis.Math.sin(angleInRadians);
+        const oneMinusCos = 1 - cosAngle;
+
+        const tx = oneMinusCos * axisX;
+        const ty = oneMinusCos * axisY;
+        const tz = oneMinusCos * axisZ;
+        const txy = tx * axisY;
+        const txz = tx * axisZ;
+        const tyz = ty * axisZ;
+        const sinX = sinAngle * axisX;
+        const sinY = sinAngle * axisY;
+        const sinZ = sinAngle * axisZ;
+
+        return new Matrix4(
+            tx * axisX + cosAngle, txy - sinZ, txz + sinY, 0,
+            txy + sinZ, ty * axisY + cosAngle, tyz - sinX, 0,
+            txz - sinY, tyz + sinX, tz * axisZ + cosAngle, 0,
+            0, 0, 0, 1
+        );
+    }
+
+    public static scale(scaleX: number, scaleY: number, scaleZ: number): Matrix4 {
+        return new Matrix4(
+            scaleX, 0, 0, 0,
+            0, scaleY, 0, 0,
+            0, 0, scaleZ, 0,
+            0, 0, 0, 1
+        );
     }
 
 }
