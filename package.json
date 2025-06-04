@@ -1,6 +1,6 @@
 {
     "name": "@lucania/vectorics",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A linear algebra library.",
     "main": "./build/index.js",
     "files": [
