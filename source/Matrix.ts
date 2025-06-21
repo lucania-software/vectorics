@@ -173,6 +173,10 @@ export class Matrix2 extends Matrix<Tuple2x2> {
         return super.multiplyVector(vector);
     }
 
+    public clone(): Matrix2 {
+        return new Matrix2(...this.data);
+    }
+
 }
 
 export class Matrix3 extends Matrix<Tuple3x3> {
@@ -190,6 +194,10 @@ export class Matrix3 extends Matrix<Tuple3x3> {
     public multiplyVector(vector: Vector3): Vector3;
     public multiplyVector(vector: Vector<number[]>): Vector<number[]> {
         return super.multiplyVector(vector);
+    }
+
+    public clone(): Matrix3 {
+        return new Matrix3(...this.data);
     }
 
 }
@@ -267,6 +275,10 @@ export class Matrix4 extends Matrix<Tuple4x4> {
             0, 0, scaleZ, 0,
             0, 0, 0, 1
         );
+    }
+
+    public clone(): Matrix4 {
+        return new Matrix4(...this.data);
     }
 
 }
