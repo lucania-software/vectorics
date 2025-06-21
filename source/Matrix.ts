@@ -159,6 +159,8 @@ export class Matrix<Tuple extends TupleNxN> {
 
 export class Matrix2 extends Matrix<Tuple2x2> {
 
+    public static readonly SIZE = 2 * 2;
+
     public static identity() {
         return new Matrix2(
             1, 0,
@@ -174,6 +176,8 @@ export class Matrix2 extends Matrix<Tuple2x2> {
 }
 
 export class Matrix3 extends Matrix<Tuple3x3> {
+
+    public static readonly SIZE = 3 * 3;
 
     public static identity() {
         return new Matrix3(
@@ -191,6 +195,8 @@ export class Matrix3 extends Matrix<Tuple3x3> {
 }
 
 export class Matrix4 extends Matrix<Tuple4x4> {
+
+    public static readonly SIZE = 4 * 4;
 
     public static identity() {
         return new Matrix4(

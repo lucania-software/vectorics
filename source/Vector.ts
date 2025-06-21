@@ -123,6 +123,8 @@ export class Vector<Tuple extends TupleN> {
 
 export class Vector2 extends Vector<Tuple2> {
 
+    public static readonly SIZE = 2;
+
     public get x() { return this.components[0]; }
     public set x(value: number) { this.components[0] = value; }
     public get y() { return this.components[1]; }
@@ -136,12 +138,14 @@ export class Vector2 extends Vector<Tuple2> {
     public clone() { return new Vector2(this.x, this.y); }
 
     public static from(source: VectorSource<Tuple2>): Vector2 {
-        return Vector.fromSource(2, source);
+        return Vector.fromSource(Vector2.SIZE, source);
     }
 
 }
 
 export class Vector3 extends Vector<Tuple3> {
+
+    public static readonly SIZE = 3;
 
     public get x() { return this.components[0]; }
     public set x(value: number) { this.components[0] = value; }
@@ -168,12 +172,14 @@ export class Vector3 extends Vector<Tuple3> {
     public clone() { return new Vector3(this.x, this.y, this.z); }
 
     public static from(source: VectorSource<Tuple3>): Vector3 {
-        return Vector.fromSource(3, source);
+        return Vector.fromSource(Vector3.SIZE, source);
     }
 
 }
 
 export class Vector4 extends Vector<Tuple4> {
+
+    public static readonly SIZE = 4;
 
     public get x() { return this.components[0]; }
     public set x(value: number) { this.components[0] = value; }
@@ -192,7 +198,7 @@ export class Vector4 extends Vector<Tuple4> {
     public clone() { return new Vector4(this.x, this.y, this.z, this.w); }
 
     public static from(source: VectorSource<Tuple4>): Vector4 {
-        return Vector.fromSource(4, source);
+        return Vector.fromSource(Vector4.SIZE, source);
     }
 
 }
